@@ -1,0 +1,11 @@
+(function(root){
+const options={structure:['wood','rc','other','unknown'],floor:['first','upper','unknown'],condition:['clear','concern','unknown'],space:['clear','tight','unknown']};
+function assess(a){const reasons=[];if(Object.keys(options).some(k=>!options[k].includes(a[k])))return {kind:'incomplete',reasons:['4つの質問に回答してください。']};
+if(a.structure!=='wood')reasons.push(a.structure==='other'?'プレハブ工法などは、今回参照した玄関ドアの対象外です。建物の工法と別の交換方法を専門スタッフに確認しましょう。':a.structure==='rc'?'鉄骨・鉄筋コンクリートの住宅は、枠の固定方法などの確認が必要です。ALC鉄骨造は今回参照した玄関ドアの対象外です。':'建物の構造・工法を専門スタッフと確認しましょう。');
+if(a.floor!=='first')reasons.push(a.floor==='upper'?'参照資料の玄関ドアは1階の土間に設置する条件です。2階以上の玄関は、別の方法も含めて個別に確認しましょう。':'玄関の位置と床のつくりを現地で確認しましょう。');
+if(a.condition!=='clear')reasons.push(a.condition==='concern'?'ひびや雨じみなどは、交換前の補修が必要な場合があります。気になる場所を現地で確認します。':'枠や壁まわりの状態を現地で確認します。');
+if(a.space!=='clear')reasons.push(a.space==='tight'?'搬入経路や作業するスペースを確認します。物の移動などで対応できる場合もあります。':'玄関の内側・外側の作業スペースを現地で確認します。');return {kind:reasons.length?'review':'possible',reasons};}
+function manual(w,h){const parse=(v,min,max)=>{if(String(v).trim()==='')return null;const n=Number(v);if(!Number.isFinite(n)||n<min||n>max)throw Error('単位は㎜です。幅200〜6,000、高さ500〜5,000の範囲で、入力をご確認ください。');return Math.round(n*10)/10;};const width=parse(w,200,6000),height=parse(h,500,5000);return width===null&&height===null?null:{width,height,source:'manual'};}
+function estimate(points,longSide,w,h){if(points.length!==6)throw Error('写真上の6点を指定してください。');if(![297,91,85.6].includes(longSide))throw Error('基準物を選び直してください。');if(points.some(p=>!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.y<0||p.x>w||p.y>h))throw Error('写真の内側を指定してください。');const d=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),r=d(points[0],points[1]);if(r<Math.max(w,h)*.03)throw Error('基準物が小さすぎます。撮り直すか、採寸を省略してください。');if(d(points[2],points[3])<10||d(points[4],points[5])<10)throw Error('枠の両端を離して指定してください。');const m={width:Math.round(d(points[2],points[3])/r*longSide/10)*10,height:Math.round(d(points[4],points[5])/r*longSide/10)*10,source:'photo'};if(m.width<200||m.width>6000||m.height<500||m.height>5000)throw Error('測定点・基準物を見直してください。目安が大きく外れたため寸法は表示しません。');return m;}
+const api={options,assess,manual,estimate};root.Doorimo=api;if(typeof module!=='undefined')module.exports=api;
+})(typeof globalThis!=='undefined'?globalThis:this);

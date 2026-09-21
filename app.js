@@ -28,6 +28,7 @@ async function go(s){
    const nodes=s===0?[app.querySelector('.hero')]:[...app.children].filter(e=>!e.classList.contains('progress'));
    const animations=nodes.map((el,i)=>el.animate([{opacity:0,transform:'translateY('+ (forward?24:-18) +'px)'},{opacity:1,transform:'translateY(0)'}],{duration:560,delay:Math.min(i,5)*45,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}));
    const bar=app.querySelector('.track i');if(bar)bar.animate([{width:(previous+1)/7*100+'%'},{width:(s+1)/7*100+'%'}],{duration:650,easing:'cubic-bezier(.16,1,.3,1)'});
+   const token=generation;setTimeout(()=>{if(token===generation)app.inert=false;},150);
    await Promise.allSettled(animations.map(a=>a.finished));
   }
  }finally{app.inert=false;transitioning=false;app.querySelector('h1,h2')?.focus({preventScroll:true});}

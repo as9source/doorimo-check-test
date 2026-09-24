@@ -19,7 +19,7 @@ function show(data,values){
  function close(){inert.forEach(([e,was])=>e.inert=was);preview.remove();document.body.classList.remove('quote-open');previous?.focus();}
  preview.querySelector('#quote-close').onclick=close;
  preview.onkeydown=e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const buttons=[...preview.querySelectorAll('button')],first=buttons[0],last=buttons.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}};
- preview.querySelector('#quote-print').onclick=async()=>{await Promise.all([...preview.querySelectorAll('img')].map(img=>img.decode().catch(()=>{})));window.print();};
+ preview.querySelector('#quote-print').onclick=()=>window.print();
  preview.querySelector('#quote-save').onclick=()=>{
   const html='<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ドアリモ 見積もり依頼書</title><style>'+paperCSS+'</style><body>'+content+'</body></html>';
   const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),link=document.createElement('a');link.href=url;link.download='ドアリモ見積もり依頼書.html';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);preview.querySelector('#quote-status').textContent='保存を開始しました。依頼書には入力した連絡先と写真が含まれます。';

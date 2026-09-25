@@ -34,3 +34,4 @@ body.quote-open{overflow:hidden}#quote-preview{position:fixed;inset:0;z-index:10
 .test-lock{font-size:14px;font-weight:700;color:#b3261e;margin:6px 0 0}
 .quote-toolbar button:disabled{opacity:.45;cursor:not-allowed}
 @media print{body>*{display:none!important}body::before{content:"テスト版のため印刷できません";display:block;font-size:24px;font-weight:700;text-align:center;margin-top:40mm}}
+.quote-builder input:disabled,.quote-builder textarea:disabled{background:#eef0ec;cursor:not-allowed}

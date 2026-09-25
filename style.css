@@ -35,3 +35,9 @@ body.quote-open{overflow:hidden}#quote-preview{position:fixed;inset:0;z-index:10
 .quote-toolbar button:disabled{opacity:.45;cursor:not-allowed}
 @media print{body>*{display:none!important}body::before{content:"テスト版のため印刷できません";display:block;font-size:24px;font-weight:700;text-align:center;margin-top:40mm}}
 .quote-builder input:disabled,.quote-builder textarea:disabled{background:#eef0ec;cursor:not-allowed}
+.quote-builder summary{list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--green);color:#fff;font-size:17px;font-weight:700;padding:16px 24px;border-radius:16px;box-shadow:0 5px 16px #26473320}
+.quote-builder summary::-webkit-details-marker{display:none}
+.quote-builder summary::after{content:"＋";font-size:22px;font-weight:400}
+.quote-builder details[open] summary{margin-bottom:18px}
+.quote-builder details[open] summary::after{content:"－"}
+@media(hover:hover){.quote-builder summary:hover{background:#1c3f30}}

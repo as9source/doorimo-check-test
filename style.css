@@ -41,3 +41,6 @@ body.quote-open{overflow:hidden}#quote-preview{position:fixed;inset:0;z-index:10
 .quote-builder details[open] summary{margin-bottom:18px}
 .quote-builder details[open] summary::after{content:"－"}
 @media(hover:hover){.quote-builder summary:hover{background:#1c3f30}}
+@keyframes quote-pulse{0%{box-shadow:0 0 0 0 #284d3e99}70%{box-shadow:0 0 0 14px #284d3e00}100%{box-shadow:0 0 0 0 #284d3e00}}
+.quote-builder details:not([open]) summary{animation:quote-pulse 1.6s ease-out infinite}
+@media(prefers-reduced-motion:reduce){.quote-builder details:not([open]) summary{animation:none}}

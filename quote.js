@@ -12,18 +12,13 @@ function show(data,values){
  document.getElementById('quote-preview')?.remove();
  const previous=document.activeElement,preview=document.createElement('section');preview.id='quote-preview';preview.setAttribute('role','dialog');preview.setAttribute('aria-modal','true');preview.setAttribute('aria-label','見積もり依頼書のプレビュー');
  const content=paper(data,values);
- preview.innerHTML=`<div class="quote-toolbar"><button class="smallbtn" id="quote-close">← 編集に戻る</button><button class="primary" id="quote-print">印刷・PDF保存</button><button class="smallbtn" id="quote-save">依頼書を保存（HTML）</button><p class="micro">PDFにするには、印刷画面でPDF保存を選びます。保存先の表示は端末により異なります。</p><p id="quote-status" class="micro" role="status"></p></div><style>${paperCSS.replaceAll('body{','.quote-preview-body{').replaceAll('h1{','#quote-preview h1{').replaceAll('h2{','#quote-preview h2{').replaceAll('p{','#quote-preview p{').replaceAll('li{','#quote-preview li{')}</style>${content}`;
+ preview.innerHTML=`<div class="quote-toolbar"><button class="smallbtn" id="quote-close">← 編集に戻る</button><button class="primary" disabled>印刷・PDF保存</button><button class="smallbtn" disabled>依頼書を保存（HTML）</button><p class="test-lock">テスト版のため、印刷・PDF保存・依頼書の保存はできません。</p></div><style>${paperCSS.replaceAll('body{','.quote-preview-body{').replaceAll('h1{','#quote-preview h1{').replaceAll('h2{','#quote-preview h2{').replaceAll('p{','#quote-preview p{').replaceAll('li{','#quote-preview li{')}</style>${content}`;
  const siblings=[...document.body.children].filter(e=>!['SCRIPT','STYLE'].includes(e.tagName));
  const inert=siblings.map(e=>[e,e.inert]);inert.forEach(([e])=>e.inert=true);
  document.body.append(preview);document.body.classList.add('quote-open');
  function close(){inert.forEach(([e,was])=>e.inert=was);preview.remove();document.body.classList.remove('quote-open');previous?.focus();}
  preview.querySelector('#quote-close').onclick=close;
  preview.onkeydown=e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const buttons=[...preview.querySelectorAll('button')],first=buttons[0],last=buttons.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}};
- preview.querySelector('#quote-print').onclick=()=>window.print();
- preview.querySelector('#quote-save').onclick=()=>{
-  const html='<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ドアリモ 見積もり依頼書</title><style>'+paperCSS+'</style><body>'+content+'</body></html>';
-  const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),link=document.createElement('a');link.href=url;link.download='ドアリモ見積もり依頼書.html';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);preview.querySelector('#quote-status').textContent='保存を開始しました。依頼書には入力した連絡先と写真が含まれます。';
- };
  preview.querySelector('#quote-close').focus();
 }
 function bind(data,values){const el=document.getElementById('quote-form');if(!el)return;el.oninput=()=>Object.assign(values,Object.fromEntries(new FormData(el)));el.onsubmit=e=>{e.preventDefault();Object.assign(values,Object.fromEntries(new FormData(el)));show(data,values);};}
